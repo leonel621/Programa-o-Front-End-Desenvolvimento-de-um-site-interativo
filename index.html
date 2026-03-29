@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+ 
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Portal Tetris</title>
+  <!-- arquivo de estilos separado, boa prática pra não misturar HTML com CSS -->
+  <link rel="stylesheet" href="style.css" />
+</head>
+ 
+<body>
+ 
+  <!-- cabeçalho da página: título e botão de tema -->
+  <header class="cabecalho">
+    <h1 class="cabecalho__titulo">Portal Tetris</h1>
+    <!-- aria-label ajuda leitores de tela a descrever o botão pra pessoas com deficiência visual -->
+    <button id="btn-tema" class="btn-tema" aria-label="Alternar tema">Tema Claro</button>
+  </header>
+ 
+  <!-- main é onde fica o conteúdo principal da página -->
+  <main class="principal">
+ 
+    <!-- seção de boas-vindas com o botão de ir pro jogo -->
+    <section class="secao-boas-vindas" aria-label="Boas-vindas">
+      <h2>Bem-vindo ao Portal</h2>
+      <p>Clique no botão para jogar!</p>
+      <!-- usamos <a> com href pra navegar pra outra página; quando o amigo subir o jogo é só trocar o # pelo link dele -->
+      <a href="#" class="btn-jogar" aria-label="Ir para o jogo de Tetris">▶ Jogar Tetris</a>
+    </section>
+ 
+    <!-- seção do formulário de registro de apelido -->
+    <section class="secao-formulario" aria-label="Registro de apelido">
+      <h2>Registrar Apelido</h2>
+ 
+      <!-- novalidate desativa a validação padrão do navegador, o JavaScript cuida disso -->
+      <form id="form-apelido" class="formulario" novalidate>
+ 
+        <!-- o "for" do label precisa bater com o "id" do input pra ficarem vinculados -->
+        <label for="input-apelido">Seu apelido:</label>
+        <input
+          type="text"
+          id="input-apelido"
+          name="apelido"
+          placeholder="Ex: Professor Flores"
+          maxlength="20"
+          aria-required="true"
+        />
+ 
+        <!-- esse span começa vazio e o JavaScript escreve a mensagem de erro nele quando necessário -->
+        <span id="erro-apelido" class="erro" role="alert" aria-live="polite"></span>
+ 
+        <button type="submit" class="btn-registrar">Registrar</button>
+ 
+      </form>
+    </section>
+ 
+    <!-- seção da lista de jogadores; começa com um aviso e o JavaScript preenche dinamicamente -->
+    <section class="secao-lista" aria-label="Lista de jogadores registrados">
+      <h2>Jogadores Registrados</h2>
+ 
+      <ul id="lista-jogadores" class="lista-jogadores">
+        <li class="lista-vazia">Nenhum jogador registrado ainda.</li>
+      </ul>
+    </section>
+ 
+    <!-- seção de jogos buscados da API externa -->
+    <section class="secao-jogos" aria-label="Outros jogos gratuitos">
+      <h2>Outros Jogos Gratuitos</h2>
+      <p class="jogos-subtitulo">Enquanto o Tetris não abre, que tal explorar?</p>
+ 
+      <button id="btn-buscar-jogos" class="btn-buscar">Buscar Jogos</button>
+ 
+      <!-- esse parágrafo mostra "Buscando..." enquanto aguarda a resposta da API -->
+      <p id="jogos-status" class="jogos-status"></p>
+ 
+      <!-- div vazia que o JavaScript vai preencher com os cards dos jogos -->
+      <div id="jogos-grid" class="jogos-grid"></div>
+    </section>
+ 
+  </main>
+ 
+  <footer class="rodape">
+    <p>Projeto desenvolvido por: Eduardo Leonel Santos, João Victor Bassolli e Reginaldo de Oliveira Ribeiro da Silva</p>
+    <p>Disciplina: Programação Front-End | Professor: José Carlos Domingues Flores</p>
+  </footer>
+ 
+  <!-- script no final do body pra garantir que o HTML já carregou antes do JavaScript rodar -->
+  <script src="script.js"></script>
+ 
+</body>
+ 
+</html>
+ 

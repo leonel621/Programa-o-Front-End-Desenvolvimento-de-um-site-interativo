@@ -1,0 +1,403 @@
+:root {
+  --cor-fundo: #111111;
+  --cor-texto: #dddddd;
+  --cor-cabecalho: #0a0a0a;
+  --cor-texto-cabecalho: #dddddd;
+  --cor-card: #1c1c1c;
+  --cor-borda: #2e2e2e;
+  --cor-destaque: #c9a227;
+  --cor-botao-jogar: #c9a227;
+  --cor-texto-botao-jogar: #000000;
+  --cor-erro: #ff4444;
+  --cor-sucesso: #00cc66;
+}
+ 
+/* variáveis do tema claro - aplicadas quando o body tem a classe "tema-claro" */
+body.tema-claro {
+  --cor-fundo: #f4f4f4;
+  --cor-texto: #222222;
+  --cor-cabecalho: #1a1a1a;
+  --cor-texto-cabecalho: #c9a227;
+  --cor-card: #ffffff;
+  --cor-borda: #cccccc;
+  --cor-destaque: #c9a227;
+  --cor-botao-jogar: #1a1a1a;
+  --cor-texto-botao-jogar: #ffffff;
+  --cor-erro: #cc0000;
+}
+ 
+/* =============================================
+   RESET BÁSICO
+   Remove margens e paddings padrão do navegador
+   pra termos controle total sobre o espaçamento
+   ============================================= */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+ 
+/* =============================================
+   ESTILOS GERAIS DO BODY
+   ============================================= */
+body {
+  background-color: var(--cor-fundo);
+  color: var(--cor-texto);
+  font-family: Georgia, serif;
+  /* transition faz a troca de tema acontecer suavemente em vez de piscar */
+  transition: background-color 0.3s, color 0.3s;
+}
+ 
+/* =============================================
+   CABEÇALHO
+   ============================================= */
+.cabecalho {
+  background-color: var(--cor-cabecalho);
+  color: var(--cor-texto-cabecalho);
+  padding: 16px 24px;
+  /* flexbox coloca o título e o botão lado a lado na mesma linha */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  /* borda amarela embaixo pra reforçar o tema */
+  border-bottom: 2px solid var(--cor-destaque);
+}
+ 
+.cabecalho__titulo {
+  font-size: 1.5rem;
+  color: var(--cor-destaque);
+  letter-spacing: 1px;
+}
+ 
+/* botão de alternar tema claro/escuro */
+.btn-tema {
+  background-color: transparent;
+  color: var(--cor-texto-cabecalho);
+  border: 2px solid var(--cor-destaque);
+  padding: 8px 14px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+ 
+.btn-tema {
+  background-color: var(--cor-destaque);
+  color: #000000;
+  border: 2px solid var(--cor-destaque);
+  font-weight: bold;
+}
+.btn-tema:hover {
+  opacity: 0.85;
+}
+ 
+/* =============================================
+   CONTEÚDO PRINCIPAL
+   ============================================= */
+.principal {
+  max-width: 800px;
+  /* margin: auto centraliza o conteúdo horizontalmente na página */
+  margin: 32px auto;
+  padding: 0 16px;
+  display: flex;
+  flex-direction: column;
+  /* gap define o espaço entre cada seção */
+  gap: 32px;
+}
+ 
+/* =============================================
+   SEÇÕES (cards)
+   ============================================= */
+.secao-boas-vindas,
+.secao-formulario,
+.secao-lista,
+.secao-jogos {
+  background-color: var(--cor-card);
+  border: 1px solid var(--cor-borda);
+  border-radius: 8px;
+  padding: 24px;
+}
+ 
+.secao-boas-vindas h2,
+.secao-formulario h2,
+.secao-lista h2,
+.secao-jogos h2 {
+  font-size: 1.2rem;
+  margin-bottom: 12px;
+  color: var(--cor-texto);
+  border-bottom: 1px solid var(--cor-destaque);
+  padding-bottom: 6px;
+}
+ 
+.secao-boas-vindas p {
+  margin-bottom: 16px;
+  line-height: 1.6;
+}
+ 
+/* =============================================
+   BOTÃO JOGAR
+   ============================================= */
+.btn-jogar {
+  display: inline-block;
+  background-color: var(--cor-botao-jogar);
+  color: var(--cor-texto-botao-jogar);
+  padding: 12px 24px;
+  /* text-decoration: none remove o sublinhado padrão dos links */
+  text-decoration: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-weight: bold;
+  transition: opacity 0.2s;
+}
+ 
+.btn-jogar:hover {
+  opacity: 0.85;
+}
+ 
+/* =============================================
+   FORMULÁRIO
+   ============================================= */
+.formulario {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+ 
+.formulario label {
+  font-weight: bold;
+  font-size: 0.95rem;
+}
+ 
+.formulario input {
+  padding: 10px;
+  border: 1px solid var(--cor-borda);
+  border-radius: 4px;
+  font-size: 1rem;
+  background-color: var(--cor-fundo);
+  color: var(--cor-texto);
+}
+ 
+/* :focus é uma pseudo-classe que estiliza o input quando o usuário clica nele */
+.formulario input:focus {
+  outline: 2px solid var(--cor-destaque);
+  border-color: var(--cor-destaque);
+}
+ 
+/* mensagem de erro embaixo do input */
+.erro {
+  color: var(--cor-erro);
+  font-size: 0.85rem;
+  /* min-height reserva espaço pra mensagem não "pular" o layout quando aparecer */
+  min-height: 18px;
+}
+ 
+.btn-registrar {
+  background-color: var(--cor-destaque);
+  color: #000000;
+  border: none;
+  padding: 10px 20px;
+  font-size: 1rem;
+  font-weight: bold;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: opacity 0.2s;
+  align-self: flex-start;
+}
+
+body.tema-claro .btn-registrar,
+body.tema-claro .btn-buscar {
+  background-color: #1a1a1a;
+  color: #ffffff;
+}
+ 
+.btn-registrar:hover {
+  opacity: 0.85;
+}
+ 
+/* =============================================
+   LISTA DE JOGADORES
+   ============================================= */
+/* list-style: none remove os marcadores padrão de lista (bolinhas) */
+.lista-jogadores {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+ 
+.lista-jogadores li {
+  background-color: var(--cor-fundo);
+  border: 1px solid var(--cor-borda);
+  border-radius: 4px;
+  padding: 10px 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+ 
+.lista-vazia {
+  color: #666666;
+  font-style: italic;
+}
+ 
+/* botão de remover cada jogador da lista */
+.btn-remover {
+  background-color: transparent;
+  color: var(--cor-erro);
+  border: 1px solid var(--cor-erro);
+  padding: 4px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  transition: background-color 0.2s, color 0.2s;
+}
+ 
+.btn-remover:hover {
+  background-color: var(--cor-erro);
+  color: #ffffff;
+}
+ 
+/* =============================================
+   SEÇÃO DE JOGOS DA API
+   ============================================= */
+.jogos-subtitulo {
+  margin-bottom: 16px;
+  color: #888888;
+  font-size: 0.9rem;
+}
+ 
+.btn-buscar {
+  background-color: var(--cor-destaque);
+  color: #000000;
+  border: none;
+  padding: 10px 20px;
+  font-size: 1rem;
+  font-weight: bold;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: opacity 0.2s;
+  margin-bottom: 16px;
+}
+ 
+.btn-buscar:hover {
+  opacity: 0.85;
+}
+ 
+.jogos-status {
+  color: #888888;
+  font-style: italic;
+  margin-bottom: 12px;
+  min-height: 20px;
+}
+ 
+/* grid de 3 colunas no desktop */
+.jogos-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+ 
+/* card individual de cada jogo */
+.jogo-card {
+  background-color: var(--cor-fundo);
+  border: 1px solid var(--cor-borda);
+  border-radius: 6px;
+  /* overflow: hidden faz a imagem não vazar pra fora do card arredondado */
+  overflow: hidden;
+}
+ 
+.jogo-card img {
+  width: 100%;
+  height: 120px;
+  /* object-fit: cover recorta a imagem proporcionalmente sem distorcer */
+  object-fit: cover;
+  display: block;
+}
+ 
+.jogo-card__info {
+  padding: 10px;
+}
+ 
+.jogo-card__titulo {
+  font-size: 0.9rem;
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+ 
+.jogo-card__genero {
+  font-size: 0.8rem;
+  color: #888888;
+  margin-bottom: 8px;
+}
+ 
+.jogo-card__link {
+  display: inline-block;
+  font-size: 0.8rem;
+  color: var(--cor-destaque);
+  text-decoration: none;
+}
+ 
+.jogo-card__link:hover {
+  text-decoration: underline;
+}
+ 
+/* =============================================
+   RODAPÉ
+   ============================================= */
+.rodape {
+  text-align: center;
+  padding: 16px;
+  margin-top: 16px;
+  font-size: 0.85rem;
+  color: #666666;
+  border-top: 1px solid var(--cor-borda);
+}
+ 
+/* =============================================
+   RESPONSIVIDADE COM MEDIA QUERIES
+   @media é uma regra do CSS que aplica estilos
+   somente quando a tela tiver até um certo tamanho.
+   Assim o site funciona bem no celular também.
+   ============================================= */
+ 
+/* tablet: telas até 768px */
+@media (max-width: 768px) {
+  .cabecalho {
+    /* no celular empilha o título e o botão um embaixo do outro */
+    flex-direction: column;
+    gap: 10px;
+    text-align: center;
+  }
+ 
+  .principal {
+    margin: 16px auto;
+  }
+ 
+  /* grid vira 2 colunas no tablet */
+  .jogos-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+ 
+/* celular: telas até 480px */
+@media (max-width: 480px) {
+  .cabecalho__titulo {
+    font-size: 1.2rem;
+  }
+ 
+  /* botão jogar ocupa a largura toda no celular */
+  .btn-jogar {
+    display: block;
+    text-align: center;
+  }
+ 
+  .btn-registrar {
+    align-self: stretch;
+    text-align: center;
+  }
+ 
+  /* grid vira 1 coluna no celular */
+  .jogos-grid {
+    grid-template-columns: 1fr;
+  }
+}
