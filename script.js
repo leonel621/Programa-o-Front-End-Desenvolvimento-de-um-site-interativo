@@ -198,3 +198,145 @@ function criarCardJogo(jogo) {
   return card;
 }
  
+
+/* =============================================
+   FUNCIONALIDADE 5 - MODAL DO TETRIS
+   Abre e fecha a janela do jogo quando o jogador
+   clica em "Jogar Tetris" ou no botão X.
+   ============================================= */
+
+let modalTetris     = document.getElementById("modal-tetris");
+let btnAbrirTetris  = document.getElementById("btn-abrir-tetris");
+let btnFecharTetris = document.getElementById("btn-fechar-tetris");
+
+/* Quando clica em "Jogar Tetris", remove o atributo hidden do modal
+   (o CSS usa [hidden] pra esconder com display:none) */
+btnAbrirTetris.addEventListener("click", function () {
+  modalTetris.removeAttribute("hidden");
+  document.body.style.overflow = "hidden"; // impede scroll da página por baixo
+});
+
+/* Fecha o modal ao clicar no X */
+btnFecharTetris.addEventListener("click", function () {
+  fecharModalTetris();
+});
+
+/* Fecha também se o jogador clicar no fundo escuro fora do conteúdo */
+modalTetris.addEventListener("click", function (evento) {
+  // evento.target é o elemento clicado; só fecha se for o fundo, não o conteúdo interno
+  if (evento.target === modalTetris) {
+    fecharModalTetris();
+  }
+});
+
+/* Fecha com a tecla Escape */
+document.addEventListener("keydown", function (evento) {
+  if (evento.key === "Escape" && !modalTetris.hidden) {
+    fecharModalTetris();
+  }
+});
+
+function fecharModalTetris() {
+  modalTetris.setAttribute("hidden", "");
+  document.body.style.overflow = ""; // devolve o scroll da página
+}
+
+
+/* =============================================
+   FUNCIONALIDADE 6 - POP-UP "SAIBA MAIS"
+   com botão "Não" que foge do mouse
+   ============================================= */
+
+let popupSaibaMais = document.getElementById("popup-saiba-mais");
+let btnSaibaMais   = document.getElementById("btn-saiba-mais");
+let btnPopupSim    = document.getElementById("popup-btn-sim");
+let btnPopupNao    = document.getElementById("popup-btn-nao");
+let areaBotoes     = document.getElementById("popup-botoes");
+
+/* Abre o pop-up e recoloca o botão Não na posição original */
+btnSaibaMais.addEventListener("click", function () {
+  popupSaibaMais.removeAttribute("hidden");
+  // reseta a posição e remove a classe "fugindo" pra voltar ao lado do Sim
+  btnPopupNao.style.top  = "";
+  btnPopupNao.style.left = "";
+  btnPopupNao.classList.remove("fugindo");
+});
+
+/* Se o jogador conseguir clicar em "Sim", fecha o pop-up e abre o Tetris */
+btnPopupSim.addEventListener("click", function () {
+  popupSaibaMais.setAttribute("hidden", "");
+  modalTetris.removeAttribute("hidden");
+  document.body.style.overflow = "hidden";
+});
+
+/* Fecha o pop-up se clicar no fundo escuro */
+popupSaibaMais.addEventListener("click", function (evento) {
+  if (evento.target === popupSaibaMais) {
+    popupSaibaMais.setAttribute("hidden", "");
+  }
+});
+
+/* ── BOTÃO NÃO FUGINDO ──
+   Quando o mouse passa por cima do botão "Não" pela primeira vez,
+   ele ganha a classe "fugindo" (que o torna position: absolute)
+   e começa a se mover aleatoriamente dentro da área de botões.
+   Antes disso, fica no fluxo normal, lado a lado com o Sim. */
+btnPopupNao.addEventListener("mouseover", function () {
+  // na primeira vez: vira absolute pra poder se mover livremente
+  if (!btnPopupNao.classList.contains("fugindo")) {
+    // guarda a posição atual antes de virar absolute, pra não "saltar"
+    var retangulo = btnPopupNao.getBoundingClientRect();
+    var retanguloArea = areaBotoes.getBoundingClientRect();
+    btnPopupNao.style.left = (retangulo.left - retanguloArea.left) + "px";
+    btnPopupNao.style.top  = (retangulo.top  - retanguloArea.top)  + "px";
+    btnPopupNao.classList.add("fugindo");
+  }
+
+  // tamanho da área onde o botão pode se mover
+  var larguraArea  = areaBotoes.offsetWidth;
+  var alturaArea   = areaBotoes.offsetHeight;
+
+  // tamanho do próprio botão
+  var larguraBotao = btnPopupNao.offsetWidth;
+  var alturaBotao  = btnPopupNao.offsetHeight;
+
+  // calcula o máximo que pode mover sem sair da área
+  var maxEsquerda = larguraArea - larguraBotao;
+  var maxTopo     = alturaArea  - alturaBotao;
+
+  // sorteia uma posição aleatória dentro dos limites calculados
+  var novoEsquerda = Math.floor(Math.random() * maxEsquerda);
+  var novoTopo     = Math.floor(Math.random() * maxTopo);
+
+  // aplica a nova posição via CSS
+  btnPopupNao.style.left = novoEsquerda + "px";
+  btnPopupNao.style.top  = novoTopo     + "px";
+});
+
+/* toque mobile: no celular não existe "mouseover", então usamos touchstart
+   pra fazer o mesmo efeito quando o dedo encosta no botão */
+btnPopupNao.addEventListener("touchstart", function (evento) {
+  evento.preventDefault(); // evita que o toque vire um clique
+
+  if (!btnPopupNao.classList.contains("fugindo")) {
+    var retangulo = btnPopupNao.getBoundingClientRect();
+    var retanguloArea = areaBotoes.getBoundingClientRect();
+    btnPopupNao.style.left = (retangulo.left - retanguloArea.left) + "px";
+    btnPopupNao.style.top  = (retangulo.top  - retanguloArea.top)  + "px";
+    btnPopupNao.classList.add("fugindo");
+  }
+
+  var larguraArea  = areaBotoes.offsetWidth;
+  var alturaArea   = areaBotoes.offsetHeight;
+  var larguraBotao = btnPopupNao.offsetWidth;
+  var alturaBotao  = btnPopupNao.offsetHeight;
+
+  var maxEsquerda = larguraArea - larguraBotao;
+  var maxTopo     = alturaArea  - alturaBotao;
+
+  var novoEsquerda = Math.floor(Math.random() * maxEsquerda);
+  var novoTopo     = Math.floor(Math.random() * maxTopo);
+
+  btnPopupNao.style.left = novoEsquerda + "px";
+  btnPopupNao.style.top  = novoTopo     + "px";
+}, { passive: false });

@@ -401,3 +401,444 @@ body.tema-claro .btn-buscar {
     grid-template-columns: 1fr;
   }
 }
+
+/* =============================================
+   BOTÃO SAIBA MAIS
+   ============================================= */
+.boas-vindas__botoes {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.btn-saiba-mais {
+  display: inline-block;
+  background-color: transparent;
+  color: var(--cor-destaque);
+  border: 2px solid var(--cor-destaque);
+  padding: 11px 22px;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.btn-saiba-mais:hover {
+  background-color: var(--cor-destaque);
+  color: #000000;
+}
+
+/* =============================================
+   POP-UP SAIBA MAIS
+   ============================================= */
+
+/* fundo escurecido que cobre a página inteira */
+.popup-overlay {
+  position: fixed;
+  inset: 0;                        /* top/right/bottom/left = 0 de uma vez */
+  background: rgba(0, 0, 0, 0.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+  animation: fadeIn 0.2s ease;
+}
+
+/* a caixinha branca/escura do pop-up */
+.popup-caixa {
+  background-color: var(--cor-card);
+  border: 2px solid var(--cor-destaque);
+  border-radius: 10px;
+  padding: 36px 32px 28px;
+  max-width: 420px;
+  width: 90%;
+  text-align: center;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.5);
+}
+
+.popup-titulo {
+  font-size: 1.4rem;
+  color: var(--cor-destaque);
+  margin-bottom: 14px;
+}
+
+.popup-descricao {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin-bottom: 28px;
+  color: var(--cor-texto);
+}
+
+/* área dos botões — position relative é necessário
+   pra o botão Não se mover livremente com top/left dentro dela */
+.popup-botoes {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  min-height: 100px; /* espaço pro botão Não se mover quando virar absolute */
+}
+
+/* estilo base dos dois botões do pop-up */
+.popup-btn {
+  padding: 12px 28px;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.popup-btn--sim {
+  background-color: var(--cor-sucesso);
+  color: #ffffff;
+}
+
+.popup-btn--sim:hover {
+  opacity: 0.85;
+}
+
+/* botão Não: começa no fluxo normal (ao lado do Sim).
+   O JS adiciona a classe "fugindo" no primeiro mouseover,
+   aí vira absolute e começa a se mover livremente. */
+.popup-btn--nao {
+  background-color: var(--cor-erro);
+  color: #ffffff;
+  position: relative; /* fica no fluxo, lado a lado com o Sim */
+}
+
+.popup-btn--nao.fugindo {
+  position: absolute; /* vira absolute só depois do primeiro mouseover */
+}
+
+.popup-btn--nao:hover {
+  opacity: 0.85;
+}
+
+/* =============================================
+   MODAL DO TETRIS (janela que cobre a tela)
+   ============================================= */
+
+/* fundo escuro que cobre tudo */
+.modal-tetris {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.88);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 300;
+  animation: fadeIn 0.25s ease;
+  overflow-y: auto;
+  padding: 16px;
+}
+
+/* quando tem o atributo hidden, esconde o modal */
+.modal-tetris[hidden] { display: none; }
+.popup-overlay[hidden] { display: none; }
+
+/* conteúdo interno do modal */
+.modal-tetris__conteudo {
+  position: relative;
+  background: #0a0a0f;
+  border: 2px solid #2a2a3e;
+  border-radius: 8px;
+  padding: 24px 16px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: fit-content;
+  max-width: 98vw;
+}
+
+/* botão X no canto superior direito */
+.modal-tetris__fechar {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  background: transparent;
+  border: 1px solid #555;
+  color: #aaa;
+  font-size: 1rem;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  cursor: pointer;
+  line-height: 1;
+  transition: background 0.15s, color 0.15s;
+}
+
+.modal-tetris__fechar:hover {
+  background: #ff2255;
+  color: #fff;
+  border-color: #ff2255;
+}
+
+/* =============================================
+   ESTILOS INTERNOS DO TETRIS
+   (copiados e ajustados do style.css original do jogo)
+   ============================================= */
+.site-header {
+  width: 100%;
+  text-align: center;
+  padding: 0.5rem 1rem 0.25rem;
+  letter-spacing: 0.25em;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+.logo {
+  font-size: clamp(1.5rem, 4vw, 2.5rem);
+  font-weight: 900;
+  color: #e8ff00;
+  text-shadow: 0 0 10px #e8ff00, 0 0 40px #e8ff00;
+  animation: flicker 4s infinite;
+  margin: 0;
+}
+
+.logo-sub {
+  font-size: 0.65rem;
+  color: #55556a;
+  letter-spacing: 0.4em;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+.game-wrapper {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 1rem;
+  padding: 0.5rem;
+  width: 100%;
+}
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  min-width: 110px;
+}
+
+.panel--left  { align-items: flex-end; }
+.panel--right { align-items: flex-start; }
+
+.info-card {
+  background: #12121c;
+  border: 1px solid #2a2a3e;
+  border-radius: 4px;
+  padding: 0.5rem 0.8rem;
+  min-width: 100px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+.info-card::before {
+  content: '';
+  display: block;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #00ffe0, transparent);
+  position: absolute;
+  top: 0; left: 0; right: 0;
+}
+
+.info-label {
+  font-size: 0.55rem;
+  letter-spacing: 0.25em;
+  color: #55556a;
+  margin-bottom: 0.2rem;
+}
+
+.info-value {
+  font-size: 1.4rem;
+  font-weight: 900;
+  color: #e8ff00;
+  text-shadow: 0 0 8px #e8ff00;
+  line-height: 1;
+}
+
+#next-canvas {
+  display: block;
+  margin: 0.4rem auto 0;
+  image-rendering: pixelated;
+}
+
+.board-wrapper {
+  position: relative;
+  flex-shrink: 0;
+}
+
+#tetris-board {
+  display: block;
+  background: #12121c;
+  border: 2px solid #2a2a3e;
+  border-radius: 4px;
+  box-shadow: 0 0 30px rgba(232,255,0,0.07), inset 0 0 40px rgba(0,0,0,0.6);
+  image-rendering: pixelated;
+}
+
+/* overlay interno do Tetris (início / pause / game over) */
+.tetris-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(10,10,15,0.92);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.7rem;
+  border-radius: 4px;
+  backdrop-filter: blur(4px);
+  transition: opacity 0.3s ease;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+.tetris-overlay.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.overlay-eyebrow {
+  font-size: 0.6rem;
+  letter-spacing: 0.4em;
+  color: #55556a;
+}
+
+.overlay-title {
+  font-size: clamp(1.6rem, 6vw, 2.5rem);
+  font-weight: 900;
+  color: #e8ff00;
+  text-shadow: 0 0 20px #e8ff00;
+  letter-spacing: 0.15em;
+  margin: 0;
+}
+
+.btn-start {
+  background: #e8ff00;
+  color: #0a0a0f;
+  border: none;
+  padding: 0.6rem 1.8rem;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.85rem;
+  font-weight: 900;
+  letter-spacing: 0.3em;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s;
+  box-shadow: 0 0 20px #e8ff00;
+}
+
+.btn-start:hover, .btn-start:focus-visible {
+  transform: scale(1.06);
+  box-shadow: 0 0 35px #e8ff00;
+}
+
+.overlay-hint {
+  font-size: 0.55rem;
+  color: #55556a;
+  letter-spacing: 0.06em;
+  text-align: center;
+  padding: 0 0.8rem;
+}
+
+/* controles mobile do Tetris */
+.mobile-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  align-items: center;
+  margin-top: 0.4rem;
+}
+
+.ctrl-row {
+  display: flex;
+  gap: 0.4rem;
+  justify-content: center;
+  /* garante que cada linha de botões não sobreponha a outra */
+  width: 100%;
+}
+
+/* linha do meio (← ↓ →): os três botões ficam lado a lado */
+.ctrl-row--mid {
+  justify-content: center;
+}
+
+.ctrl-btn {
+  width: 42px;
+  height: 42px;
+  background: #12121c;
+  border: 1px solid #2a2a3e;
+  border-radius: 4px;
+  color: #c8c8e0;
+  font-size: 1rem;
+  cursor: pointer;
+  font-family: 'Courier New', Courier, monospace;
+  transition: background 0.1s, color 0.1s;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  /* flex-shrink 0 impede os botões de encolherem e se sobreporem */
+  flex-shrink: 0;
+}
+
+.ctrl-btn:active, .ctrl-btn:focus-visible {
+  background: #e8ff00;
+  color: #0a0a0f;
+}
+
+/* botão PAUSE: ocupa a largura total da área de controles
+   e fica separado abaixo das setas com margem extra */
+.ctrl-btn--wide {
+  width: 100%;
+  max-width: 138px; /* 3 botões de 42px + 2 gaps de 6px = mesma largura do bloco de setas */
+  padding: 0 0.8rem;
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  margin-top: 0.25rem; /* espaço extra pra não grudar nas setas */
+}
+
+/* animações */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes flicker {
+  0%,100% { opacity: 1; }
+  92%     { opacity: 1; }
+  93%     { opacity: 0.6; }
+  94%     { opacity: 1; }
+  96%     { opacity: 0.7; }
+  97%     { opacity: 1; }
+}
+
+.line-clear-flash {
+  animation: lineFlash 0.18s ease-out;
+}
+
+@keyframes lineFlash {
+  0%   { filter: brightness(3); }
+  100% { filter: brightness(1); }
+}
+
+/* responsividade do tetris dentro do modal */
+@media (max-width: 600px) {
+  .game-wrapper { gap: 0.5rem; }
+  .panel { min-width: 80px; }
+  .info-card { min-width: 75px; padding: 0.4rem 0.5rem; }
+  .info-value { font-size: 1.1rem; }
+  .ctrl-btn { width: 36px; height: 36px; font-size: 0.85rem; }
+
+  #tetris-board {
+    width: 240px !important;
+    height: 480px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .btn-saiba-mais { align-self: stretch; text-align: center; }
+}

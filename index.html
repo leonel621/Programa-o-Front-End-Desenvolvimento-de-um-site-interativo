@@ -1,42 +1,39 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
- 
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Portal Tetris</title>
-  <!-- arquivo de estilos separado, boa prática pra não misturar HTML com CSS -->
   <link rel="stylesheet" href="style.css" />
 </head>
- 
+
 <body>
- 
+
   <!-- cabeçalho da página: título e botão de tema -->
   <header class="cabecalho">
     <h1 class="cabecalho__titulo">Portal Tetris</h1>
-    <!-- aria-label ajuda leitores de tela a descrever o botão pra pessoas com deficiência visual -->
     <button id="btn-tema" class="btn-tema" aria-label="Alternar tema">Tema Claro</button>
   </header>
- 
-  <!-- main é onde fica o conteúdo principal da página -->
+
   <main class="principal">
- 
-    <!-- seção de boas-vindas com o botão de ir pro jogo -->
+
+    <!-- seção de boas-vindas com o botão de ir pro jogo e o botão "Saiba Mais" -->
     <section class="secao-boas-vindas" aria-label="Boas-vindas">
       <h2>Bem-vindo ao Portal</h2>
       <p>Clique no botão para jogar!</p>
-      <!-- usamos <a> com href pra navegar pra outra página; quando o amigo subir o jogo é só trocar o # pelo link dele -->
-      <a href="#" class="btn-jogar" aria-label="Ir para o jogo de Tetris">▶ Jogar Tetris</a>
+      <div class="boas-vindas__botoes">
+        <!-- ao clicar em Jogar, abre o modal do Tetris -->
+        <button class="btn-jogar" id="btn-abrir-tetris" aria-label="Abrir o jogo de Tetris">▶ Jogar Tetris</button>
+        <!-- botão que abre o pop-up de confirmação -->
+        <button class="btn-saiba-mais" id="btn-saiba-mais" aria-label="Saiba mais sobre o Tetris">ℹ Saiba Mais</button>
+      </div>
     </section>
- 
+
     <!-- seção do formulário de registro de apelido -->
     <section class="secao-formulario" aria-label="Registro de apelido">
       <h2>Registrar Apelido</h2>
- 
-      <!-- novalidate desativa a validação padrão do navegador, o JavaScript cuida disso -->
       <form id="form-apelido" class="formulario" novalidate>
- 
-        <!-- o "for" do label precisa bater com o "id" do input pra ficarem vinculados -->
         <label for="input-apelido">Seu apelido:</label>
         <input
           type="text"
@@ -46,49 +43,143 @@
           maxlength="20"
           aria-required="true"
         />
- 
-        <!-- esse span começa vazio e o JavaScript escreve a mensagem de erro nele quando necessário -->
         <span id="erro-apelido" class="erro" role="alert" aria-live="polite"></span>
- 
         <button type="submit" class="btn-registrar">Registrar</button>
- 
       </form>
     </section>
- 
-    <!-- seção da lista de jogadores; começa com um aviso e o JavaScript preenche dinamicamente -->
+
+    <!-- lista de jogadores -->
     <section class="secao-lista" aria-label="Lista de jogadores registrados">
       <h2>Jogadores Registrados</h2>
- 
       <ul id="lista-jogadores" class="lista-jogadores">
         <li class="lista-vazia">Nenhum jogador registrado ainda.</li>
       </ul>
     </section>
- 
-    <!-- seção de jogos buscados da API externa -->
+
+    <!-- seção de jogos da API -->
     <section class="secao-jogos" aria-label="Outros jogos gratuitos">
       <h2>Outros Jogos Gratuitos</h2>
       <p class="jogos-subtitulo">Enquanto o Tetris não abre, que tal explorar?</p>
- 
       <button id="btn-buscar-jogos" class="btn-buscar">Buscar Jogos</button>
- 
-      <!-- esse parágrafo mostra "Buscando..." enquanto aguarda a resposta da API -->
       <p id="jogos-status" class="jogos-status"></p>
- 
-      <!-- div vazia que o JavaScript vai preencher com os cards dos jogos -->
       <div id="jogos-grid" class="jogos-grid"></div>
     </section>
- 
+
   </main>
- 
+
   <footer class="rodape">
     <p>Projeto desenvolvido por: Eduardo Leonel Santos, João Victor Bassolli e Reginaldo de Oliveira Ribeiro da Silva</p>
     <p>Disciplina: Programação Front-End | Professor: José Carlos Domingues Flores</p>
   </footer>
- 
-  <!-- script no final do body pra garantir que o HTML já carregou antes do JavaScript rodar -->
+
+  <!-- =====================================================
+       MODAL DO TETRIS
+       Aparece por cima da página quando o jogador clica em "Jogar Tetris".
+       O overlay escurece o fundo e o conteúdo fica centralizado.
+       ===================================================== -->
+  <div id="modal-tetris" class="modal-tetris" role="dialog" aria-modal="true" aria-label="Jogo Tetris" hidden>
+    <div class="modal-tetris__conteudo">
+
+      <!-- botão X pra fechar o modal -->
+      <button class="modal-tetris__fechar" id="btn-fechar-tetris" aria-label="Fechar Tetris">✕</button>
+
+      <!-- ── ESTRUTURA INTERNA DO TETRIS ── -->
+      <header class="site-header" role="banner">
+        <h2 class="logo">TETRIS</h2>
+        <p class="logo-sub">arcade edition</p>
+      </header>
+
+      <div class="game-wrapper" role="main">
+
+        <!-- painel esquerdo: pontuação, nível, linhas, recorde -->
+        <aside class="panel panel--left" aria-label="Informações do jogo">
+          <section class="info-card" aria-labelledby="score-label">
+            <p class="info-label" id="score-label">PONTUAÇÃO</p>
+            <p class="info-value" id="score">0</p>
+          </section>
+          <section class="info-card" aria-labelledby="level-label">
+            <p class="info-label" id="level-label">NÍVEL</p>
+            <p class="info-value" id="level">1</p>
+          </section>
+          <section class="info-card" aria-labelledby="lines-label">
+            <p class="info-label" id="lines-label">LINHAS</p>
+            <p class="info-value" id="lines">0</p>
+          </section>
+          <section class="info-card" aria-labelledby="highscore-label">
+            <p class="info-label" id="highscore-label">RECORDE</p>
+            <p class="info-value" id="highscore">0</p>
+          </section>
+        </aside>
+
+        <!-- tabuleiro central do Tetris -->
+        <section class="board-wrapper" aria-label="Tabuleiro do jogo">
+          <canvas id="tetris-board" width="300" height="600"
+                  role="img" aria-label="Tabuleiro do Tetris"></canvas>
+
+          <!-- overlay interno do Tetris (início, pause, game over) -->
+          <div class="tetris-overlay" id="tetris-overlay" role="dialog" aria-modal="true" aria-labelledby="tetris-overlay-title">
+            <p class="overlay-eyebrow" id="tetris-overlay-eyebrow">PRONTO?</p>
+            <h3 class="overlay-title" id="tetris-overlay-title">TETRIS</h3>
+            <button class="btn-start" id="btn-start" aria-label="Iniciar partida">INICIAR</button>
+            <p class="overlay-hint" id="tetris-overlay-hint">← → mover | ↑ girar | ↓ acelerar | P pausar</p>
+          </div>
+        </section>
+
+        <!-- painel direito: próxima peça + controles mobile -->
+        <aside class="panel panel--right" aria-label="Próxima peça e controles">
+          <section class="info-card" aria-labelledby="next-label">
+            <p class="info-label" id="next-label">PRÓXIMA</p>
+            <canvas id="next-canvas" width="120" height="120" aria-label="Próxima peça"></canvas>
+          </section>
+
+          <nav class="mobile-controls" aria-label="Controles por toque">
+            <div class="ctrl-row">
+              <button class="ctrl-btn" id="btn-rotate" aria-label="Girar peça">↑</button>
+            </div>
+            <div class="ctrl-row ctrl-row--mid">
+              <button class="ctrl-btn" id="btn-left"  aria-label="Mover esquerda">←</button>
+              <button class="ctrl-btn" id="btn-down"  aria-label="Acelerar queda">↓</button>
+              <button class="ctrl-btn" id="btn-right" aria-label="Mover direita">→</button>
+            </div>
+            <div class="ctrl-row">
+              <button class="ctrl-btn ctrl-btn--wide" id="btn-pause" aria-label="Pausar / Retomar">PAUSE</button>
+            </div>
+          </nav>
+        </aside>
+
+      </div><!-- fim .game-wrapper -->
+
+    </div><!-- fim .modal-tetris__conteudo -->
+  </div><!-- fim #modal-tetris -->
+
+
+  <!-- =====================================================
+       POP-UP "SAIBA MAIS"
+       Aparece quando o jogador clica em "Saiba Mais".
+       O botão "Não" foge do mouse antes de ser clicado.
+       ===================================================== -->
+  <div id="popup-saiba-mais" class="popup-overlay" role="dialog" aria-modal="true"
+       aria-labelledby="popup-titulo" hidden>
+    <div class="popup-caixa">
+      <h2 class="popup-titulo" id="popup-titulo">Quer jogar Tetris?</h2>
+      <p class="popup-descricao">
+        O Tetris é um dos jogos mais famosos do mundo!<br>
+        Encaixe as peças, complete linhas e bata seu recorde.<br><br>
+        Quer começar agora?
+      </p>
+
+      <!-- área dos botões — position: relative pra o botão Não se mover dentro dela -->
+      <div class="popup-botoes" id="popup-botoes">
+        <button class="popup-btn popup-btn--sim" id="popup-btn-sim">✔ Sim</button>
+        <!-- position: absolute pra poder mover com top/left pelo JS -->
+        <button class="popup-btn popup-btn--nao" id="popup-btn-nao">✘ Não</button>
+      </div>
+    </div>
+  </div>
+
+
   <script src="script.js"></script>
- 
+  <script src="tetris.js"></script>
+
 </body>
- 
 </html>
- 
